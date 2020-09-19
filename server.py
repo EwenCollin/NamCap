@@ -161,7 +161,9 @@ class ClientThread():
             clientsocketsList.pop(clients_index)
             connectedClients.pop(clients_index)
             gameData["players"].pop(self.username)
+        self.send_data(clients_index)
         self.ready_to_recv = True
+        print("Received data : ", data_str)
 
 
 
@@ -177,6 +179,7 @@ class ClientThread():
         clientData["lastUpdate"] = gridUpdatesCount
         network.send_data(json.dumps(clientData), self.clientsocket)
         self.ready_to_send = True
+        print("Sent data : ", clientData)
 
 
     def run(self, clients_index):
@@ -273,6 +276,8 @@ def server_run(dt):
     if len(gameData["executionTimes"]) > 200:
         gameData["executionTimes"].pop(0)
 
+    print("Delta time : ", dt)
+
 
     if len(clientsocketsList) > len(connectedClients):
         newthread = ClientThread(clientsocketsList[-1][0], clientsocketsList[-1][1], clientsocketsList[-1][2], server)
@@ -286,11 +291,13 @@ def server_run(dt):
             clientRecvThread.setDaemon(True)
             clientRecvThread.start()
             #clientThreads.append(clientThread)
+            """
         if client.is_ready_to_send():
             clientSendThread = threading.Thread(name='daemon-client', target=client.send_data, args=(index,))
             clientSendThread.setDaemon(True)
             clientSendThread.start()
             #clientThreads.append(clientThread)
+            """
 
         index += 1
 

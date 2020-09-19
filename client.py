@@ -77,7 +77,7 @@ class GameClient():
         except:
             self.client_config = {"username": "undefined", "isPacman": False, "serverIP": "localhost", "serverPort": 32768}
             saveConfig(self.client_config)
-
+        self.client_config["isReady"] = False
         self.socket = None
         self.can_send = True
         self.can_receive = True
